@@ -110,7 +110,6 @@ form.addEventListener('submit', (e) => {
         // disabled form submit
         inputElement.setAttribute('disabled', 'disabled');
         submitBtnElement.setAttribute('disabled', 'disabled');
-        alert('Game is over.');
         showModal(successPercentage);
     }
 
