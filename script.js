@@ -19,12 +19,10 @@ let generateRandomNum = Math.round(Math.random() * 8) + 1;
 let correctScore = 0;
 let wrongScore = 0;
 let gameOver = false;
-let maxPlayNumber = 5;
-let triedNumber = 1;
+let maxPlayNumber = 2;
+let triedNumber = 0;
 let successPercentage = 0;
 let wrongPercentage = 0;
-// console.log(generateRandomNum, 'generateRandomNum');
-
 
 
 // show modal
@@ -35,12 +33,56 @@ const showModal = (percentage) => {
     myModal.show();
 }
 
+// handle score
+// const handleScore = (isCorrect, notifyElm, maxPlayNumber) => {
+//     // handleScore(true, correctScore);
+//     let notifyNode;
+//     let scoreElement;
+//     let score;
+//     if(isCorrect) {
+//         correctScore++;
+//         notifyNode =   `<div class="alert alert-success" role="alert">
+//                             WoW! Guys great. It was ${generateRandomNum}
+//                         </div>`
+//         scoreElement = correctScoreElement;
+//         score = correctScore;
+//     } else {
+//         wrongScore++;
+//         notifyNode =   `<div class="alert alert-danger" role="alert">
+//                             Sorry!! Wrong Digit. It Was ${generateRandomNum}
+//                         </div>`
+//         scoreElement = wrongScoreElement;
+//         score = wrongScore;
+//     }
+
+    
+
+//     // show on dom
+//     scoreElement.textContent = score;
+
+//     // show notification
+//     notifyElm.innerHTML = notifyNode;
+    
+    
+//     // calculate percentage and show dom
+//     const percentage = (incScore / maxPlayNumber) * 100;
+//     score = percentage;
+//     successPercentageElement.textContent = `${score}%`;
+
+// }
+
 
 // form event listener
 form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const userGuessNum = +inputElement.value;
+    // reset input value
+    inputElement.value = '';
+
+    // set random number
+    generateRandomNum = Math.round(Math.random() * 8) + 1;
+
     //validate input number
     if(userGuessNum < 1 || userGuessNum > 9) {
         
@@ -48,6 +90,7 @@ form.addEventListener('submit', (e) => {
         return;
     }
 
+    // if dom manipulate and remove input disabled attribute trigger condition
     if(gameOver) {
         // reset input value
         inputElement.value = '';
@@ -57,60 +100,62 @@ form.addEventListener('submit', (e) => {
         return;
     }
 
-    if(generateRandomNum === userGuessNum) {
-        correctScore++;
-
-        // show on dom
-        correctScoreElement.textContent = correctScore;
-
-        // show correct notification
-        const correct =   `<div class="alert alert-success" role="alert">
-                            WoW! Guys great. It was ${generateRandomNum}
-                        </div>`
-        notificationElement.insertAdjacentHTML('beforeend', correct);
-        
-
-        // calculate percentage and show dom
-        const cPercentage = (correctScore / maxPlayNumber) * 100;
-        successPercentage = cPercentage;
-        successPercentageElement.textContent = `${successPercentage}%`;
-
-    } else {
-        wrongScore++;
-
-        // show on dom
-        wrongScoreElement.textContent = wrongScore;
-
-        // show wrong notification
-        const wrong = `<div class="alert alert-danger" role="alert">
-                            Sorry!! Wrong Digit. It Was ${generateRandomNum}
-                        </div>`
-        notificationElement.insertAdjacentHTML('beforeend', wrong);
-
-        // calculate percentage and show dom
-        const wPercentage = (wrongScore / maxPlayNumber) * 100;
-        wrongPercentage = wPercentage;
-        wrongPercentageElement.textContent = `${wrongPercentage}%`;
-    }
-
-
-    // reset input value
-    inputElement.value = '';
-
-    // set random number
-    generateRandomNum = Math.round(Math.random() * 8) + 1;
-    // console.log(generateRandomNum, 'generateRandomNum');
-
-    // check how many times try 
-    if(triedNumber < maxPlayNumber && !gameOver) {
+  
+    if(!gameOver) {
         triedNumber++;
-    } else {
-        gameOver = true;
 
-        // disabled form submit
-        inputElement.setAttribute('disabled', 'disabled');
-        submitBtnElement.setAttribute('disabled', 'disabled');
-        showModal(successPercentage);
+        if(generateRandomNum === userGuessNum) {
+            
+            correctScore++;
+            console.log('Correct');
+    
+            // show on dom
+            correctScoreElement.textContent = correctScore;
+    
+            // show correct notification
+            const correct =   `<div class="alert alert-success" role="alert">
+                                WoW! Guys great. It was ${generateRandomNum}
+                            </div>`
+            notificationElement.insertAdjacentHTML('beforeend', correct);
+            
+    
+            // calculate percentage and show dom
+            const cPercentage = (correctScore / maxPlayNumber) * 100;
+            successPercentage = cPercentage;
+            successPercentageElement.textContent = `${successPercentage}%`;
+    
+    
+        } else {
+            
+            wrongScore++;
+            console.log('Wrong');
+    
+            // show on dom
+            wrongScoreElement.textContent = wrongScore;
+    
+            // show wrong notification
+            const wrong = `<div class="alert alert-danger" role="alert">
+                                Sorry!! Wrong Digit. It Was ${generateRandomNum}
+                            </div>`
+            notificationElement.insertAdjacentHTML('beforeend', wrong);
+    
+            // calculate percentage and show dom
+            const wPercentage = (wrongScore / maxPlayNumber) * 100;
+            wrongPercentage = wPercentage;
+            wrongPercentageElement.textContent = `${wrongPercentage}%`;
+        }
+
+        if(triedNumber === maxPlayNumber) {
+            gameOver = true;
+            // disabled form submit
+            inputElement.setAttribute('disabled', 'disabled');
+            submitBtnElement.setAttribute('disabled', 'disabled');
+            // reset input value
+            inputElement.value = '';
+            // debugger;
+            alert('Game is over. Please try again');
+            // showModal(successPercentage);
+        }
     }
 
 })
@@ -140,15 +185,6 @@ confirmBtnElement.addEventListener('click', () => {
     notificationElement.innerHTML = '';
 
 })
-
-
-
-
-
-
-
-
-
 
 
 
